@@ -113,9 +113,36 @@ export type Project = {
   batches: string[]
   persons: Person[]
   imports: ImportRecord[]
+  /** 交货批次拆分约定（存在本机，改量后重新拆） */
+  delivery?: DeliveryPlan
   perf?: { mergeMs?: number; mergeCount?: number; importParseMs?: number; importRows?: number }
   createdAt: number
   updatedAt: number
 }
 
 export type SummaryRow = { sizeCode: string; gender: Gender; qty: number; isSpecial: boolean }
+
+/* ------------------------------- 交货批次拆分 ------------------------------- */
+
+/** 交货批次配置：index 从 1 开始，date 为约定交货日期（YYYY-MM-DD） */
+export type DeliveryBatchConfig = { index: number; date: string }
+
+/** 一个号型档的下单数量（交货拆分页的可编辑快照，不反向改动汇总表） */
+export type DeliveryOrderLine = {
+  sizeKey: string
+  sizeCode: string
+  gender: Gender
+  isSpecial: boolean
+  qty: number
+}
+
+/** 交货拆分约定：最小起订量、每箱件数、批次数与每批交货时间、各号型下单数量 */
+export type DeliveryPlan = {
+  /** 最小起订量：每个号型在每一批要么不排、要么 ≥ moq（件） */
+  moq: number
+  /** 每箱件数：非末批只排整箱，零头集中到末批 */
+  cartonSize: number
+  batches: DeliveryBatchConfig[]
+  lines: DeliveryOrderLine[]
+  updatedAt: number
+}
