@@ -160,6 +160,9 @@ export async function flushProject(project: Project): Promise<void> {
 export async function deleteProject(id: string): Promise<void> {
   store.projects = store.projects.filter((project) => project.id !== id)
   await idbDelete(STORE_PROJECTS, id)
+  // 级联清理该项目的交货批次方案（独立仓库，不会随项目自动删除）
+  const { deleteDeliveryDoc } = await import('./deliveryStore')
+  await deleteDeliveryDoc(id)
 }
 
 export async function saveRule(rule: SizeRule): Promise<void> {

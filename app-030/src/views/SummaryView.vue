@@ -64,8 +64,9 @@ function exportStockAdvice(): void {
       <div class="spacer"></div>
       <div class="toolbar">
         <button class="btn btn-sm" type="button" @click="exportStockAdvice">导出分布与备货建议 CSV</button>
+        <RouterLink class="btn btn-sm btn-primary" :to="`/delivery/${project.id}`">交货批次拆分</RouterLink>
         <RouterLink class="btn btn-sm" :to="`/merge/${project.id}`">返回归并</RouterLink>
-        <RouterLink class="btn btn-sm btn-primary" :to="`/export/${project.id}`">去导出</RouterLink>
+        <RouterLink class="btn btn-sm" :to="`/export/${project.id}`">去导出</RouterLink>
       </div>
     </div>
 
